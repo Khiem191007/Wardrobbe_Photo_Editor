@@ -1,4 +1,4 @@
-# Lumen — AI Photo Editor
+# Wardrobe — AI Photo Editor
 
 A clean, minimal photo-editing web app powered by Google's Gemini API. Upload a photo and apply filters, change outfits, swap backgrounds, or add/remove objects — all by describing what you want.
 
@@ -79,8 +79,8 @@ pnpm --filter frontend dev     # http://localhost:5173
 ### Docker
 
 ```bash
-docker build -t lumen .
-docker run -p 3000:3000 -e GEMINI_API_KEY=your_key lumen
+docker build -t wardrobe .
+docker run -p 3000:3000 -e GEMINI_API_KEY=your_key wardrobe
 ```
 
 ### Fly.io
