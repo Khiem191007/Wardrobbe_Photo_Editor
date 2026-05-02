@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+.git
+.github
+.vscode
+**/.env
+**/.env.local
+*.md
+!README.md
+.gitignore
+.dockerignore
+.prettierrc
+.prettierignore
+.npmrc
+eslint.config.js
+fly.toml
+Dockerfile

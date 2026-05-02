@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Lumen frontend — vanilla HTML/CSS/JS UI",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node serve.js",
+    "build": "echo 'No build step required for vanilla frontend'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

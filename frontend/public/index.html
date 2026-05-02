@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wardrobe — AI Photo Editor</title>
+  <meta name="description" content="Edit photos with natural language. Powered by Gemini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 6 L24 4 L28 7 L12 9 Z"
+              fill="var(--accent)"
+              stroke="#1a1815"
+              stroke-width="1"
+              stroke-linejoin="round" />
+        <path d="M24 4 L28 7 L28 26 L24 29 Z"
+              fill="#8a3220"
+              stroke="#1a1815"
+              stroke-width="1"
+              stroke-linejoin="round" />
+        <path d="M8 6 L24 4 L24 29 L8 31 Z"
+              fill="var(--accent)"
+              stroke="#1a1815"
+              stroke-width="1"
+              stroke-linejoin="round" />
+        <line x1="16" y1="5" x2="16" y2="30"
+              stroke="#1a1815"
+              stroke-width="1" />
+        <line x1="14" y1="17" x2="14" y2="20"
+              stroke="#1a1815"
+              stroke-width="1.2"
+              stroke-linecap="round" />
+        <line x1="18" y1="16" x2="18" y2="19"
+              stroke="#1a1815"
+              stroke-width="1.2"
+              stroke-linecap="round" />
+      </svg>
+      <span class="brand-name">Wardrobe</span>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="hero">
+      <p class="eyebrow">AI photo studio</p>
+      <h1 class="title">
+        Edit photos by <em>describing</em><br />
+        what you want.
+      </h1>
+      <p class="lede">
+        Drop in an image. Pick an effect or describe a change in plain words.
+        Wardrobe does the rest.
+      </p>
+    </section>
+
+    <section class="workspace" id="workspace">
+      <!-- Left: image canvas -->
+      <div class="canvas-wrap">
+        <div class="canvas" id="canvas" data-state="empty">
+          <!-- Empty state -->
+          <label class="dropzone" id="dropzone" for="file-input">
+            <div class="dropzone-inner">
+              <div class="dropzone-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 16V4M12 4l-4 4M12 4l4 4" />
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                </svg>
+              </div>
+              <p class="dropzone-title">Drop a photo here</p>
+              <p class="dropzone-hint">or click to browse · PNG, JPG, WebP · up to 12 MB</p>
+            </div>
+            <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" hidden />
+          </label>
+
+          <!-- Image state -->
+          <div class="canvas-image-wrap" id="image-wrap" hidden>
+            <img id="preview" alt="Your photo" />
+            <div class="canvas-overlay" id="overlay">
+              <div class="loader">
+                <div class="loader-pulse"></div>
+                <p class="loader-text" id="loader-text">Working…</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-toolbar" id="canvas-toolbar" hidden>
+          <button class="ghost" id="reset-btn" type="button">↶ Original</button>
+          <button class="ghost" id="new-btn" type="button">New photo</button>
+          <button class="primary-outline" id="download-btn" type="button">Download</button>
+        </div>
+      </div>
+
+      <!-- Right: controls -->
+      <aside class="controls" id="controls" aria-disabled="true">
+        <nav class="tabs" role="tablist">
+          <button class="tab active" data-tab="filter" role="tab">Filter</button>
+          <button class="tab" data-tab="clothes" role="tab">Clothes</button>
+          <button class="tab" data-tab="background" role="tab">Background</button>
+          <button class="tab" data-tab="object" role="tab">Objects</button>
+        </nav>
+
+        <!-- Filter panel -->
+        <div class="panel active" data-panel="filter">
+          <p class="panel-label">Choose a look</p>
+          <div class="filter-grid">
+            <button class="filter-chip" data-filter="vintage">
+              <span class="chip-swatch swatch-vintage"></span>
+              <span>Vintage</span>
+            </button>
+            <button class="filter-chip" data-filter="bw">
+              <span class="chip-swatch swatch-bw"></span>
+              <span>Black &amp; White</span>
+            </button>
+            <button class="filter-chip" data-filter="cinematic">
+              <span class="chip-swatch swatch-cinematic"></span>
+              <span>Cinematic</span>
+            </button>
+            <button class="filter-chip" data-filter="warm">
+              <span class="chip-swatch swatch-warm"></span>
+              <span>Golden Hour</span>
+            </button>
+            <button class="filter-chip" data-filter="cool">
+              <span class="chip-swatch swatch-cool"></span>
+              <span>Cool Blue</span>
+            </button>
+            <button class="filter-chip" data-filter="dramatic">
+              <span class="chip-swatch swatch-dramatic"></span>
+              <span>Dramatic</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Clothes panel -->
+        <div class="panel" data-panel="clothes">
+          <p class="panel-label">Describe the new outfit</p>
+          <textarea class="prompt-input" data-input="clothes" rows="3"
+            placeholder="e.g. a navy linen suit with a white shirt"></textarea>
+          <div class="suggestions">
+            <button class="sugg" data-target="clothes" data-text="a black leather jacket and white t-shirt">Leather jacket</button>
+            <button class="sugg" data-target="clothes" data-text="a flowing red summer dress">Summer dress</button>
+            <button class="sugg" data-target="clothes" data-text="a cream wool sweater">Wool sweater</button>
+            <button class="sugg" data-target="clothes" data-text="a charcoal three-piece suit">Three-piece suit</button>
+          </div>
+          <button class="primary" data-run="clothes">Apply outfit change</button>
+        </div>
+
+        <!-- Background panel -->
+        <div class="panel" data-panel="background">
+          <p class="panel-label">Describe the new background</p>
+          <textarea class="prompt-input" data-input="background" rows="3"
+            placeholder="e.g. a quiet beach at sunset, soft waves in the distance"></textarea>
+          <div class="suggestions">
+            <button class="sugg" data-target="background" data-text="a sunlit Tuscan vineyard">Vineyard</button>
+            <button class="sugg" data-target="background" data-text="a snowy mountain peak at dawn">Snowy peak</button>
+            <button class="sugg" data-target="background" data-text="a cozy library with warm lamplight">Library</button>
+            <button class="sugg" data-target="background" data-text="a futuristic city skyline at night">Cityscape</button>
+          </div>
+          <button class="primary" data-run="background">Apply new background</button>
+        </div>
+
+        <!-- Object panel -->
+        <div class="panel" data-panel="object">
+          <div class="seg" role="tablist">
+            <button class="seg-btn active" data-action="add">Add</button>
+            <button class="seg-btn" data-action="remove">Remove</button>
+          </div>
+          <p class="panel-label" id="object-label">What should we add?</p>
+          <textarea class="prompt-input" data-input="object" rows="3"
+            placeholder="e.g. a pair of black sunglasses"></textarea>
+          <button class="primary" data-run="object">Apply change</button>
+        </div>
+
+        <p class="error" id="error" hidden></p>
+      </aside>
+    </section>
+
+    <section class="footer-note">
+
+    </section>
+  </main>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
